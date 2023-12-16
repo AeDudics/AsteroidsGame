@@ -1,6 +1,7 @@
 Star[] nightSky = new Star[200];
 Spaceship spock = new Spaceship();
 ArrayList<Asteroid> yurilowenthalgotrobbed = new ArrayList<Asteroid>();
+ArrayList<Bullet> shots = new ArrayList<Bullet>();
 public void setup(){
   size(500,500);
   spock.setX(250);
@@ -8,7 +9,7 @@ public void setup(){
   for(int i = 0; i < nightSky.length; i++){
     nightSky[i] = new Star();
   }
-  for(int i = 0; i < 20; i++){
+  for(int i = 0; i < 25; i++){
     yurilowenthalgotrobbed.add(i, new Asteroid());
   }
 }
@@ -26,9 +27,26 @@ public void draw(){
       yurilowenthalgotrobbed.remove(i);
     }
   }
+  for(int i = 0; i < shots.size(); i++){
+    shots.get(i).move();
+    shots.get(i).show();
+    if((shots.get(i).getCenterX() == 0 || shots.get(i).getCenterX() == 500)||(shots.get(i).getCenterY() == 0 || shots.get(i).getCenterY() == 500)){
+      shots.remove(i);
+    }
+  }
+   for(int n = 0; n < shots.size(); n++){
+     for(int m = 0; m < yurilowenthalgotrobbed.size(); m++){
+       if(dist((float)shots.get(n).getCenterX(),(float)shots.get(n).getCenterY(),yurilowenthalgotrobbed.get(m).getX(),yurilowenthalgotrobbed.get(m).getY())<=25){
+      yurilowenthalgotrobbed.remove(m);
+      shots.remove(n);
+      break;
+     }
+    }
+   }
   spock.move();
   spock.show();
 }
+
 public void keyPressed(){
   if(key == 'a' || key == 'A'){
     spock.turn(-10);
@@ -49,5 +67,9 @@ public void keyPressed(){
     spock.setX((int)(Math.random()*500));
     spock.setY((int)(Math.random()*500));
     spock.setPointDirection((int)(Math.random()*360));
+  }
+  //bullets
+  if(key == 'f' || key == 'F'){
+    shots.add(new Bullet(spock)); 
   }
 }
